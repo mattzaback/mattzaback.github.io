@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matthew Zaback — Software Engineer & Data Scientist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pine: #12241b;
+    --pine-deep: #0b1712;
+    --pine-light: #1c3327;
+    --cream: #f2ede0;
+    --cream-dim: #cfc8b4;
+    --sand: #c9a869;
+    --sky: #7ca3b8;
+    --line: rgba(242,237,224,0.14);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--pine);
+    color:var(--cream);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  ::selection{ background:var(--sand); color:var(--pine-deep); }
+
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  .mono{
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing:0.02em;
+  }
+  a{ color:inherit; }
+
+  /* ===== Contour background (signature element) ===== */
+  #contour-bg{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    opacity:0.5;
+    pointer-events:none;
+  }
+  #contour-bg svg{ width:100%; height:100%; }
+  .contour-path{
+    fill:none;
+    stroke:var(--sand);
+    stroke-width:1;
+    opacity:0.16;
+  }
+  .contour-path:nth-child(3n){ stroke:var(--sky); opacity:0.14; }
+
+  /* ===== Layout shell ===== */
+  .wrap{
+    position:relative;
+    z-index:1;
+    max-width:920px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  nav{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:50;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:22px 40px;
+    background:linear-gradient(to bottom, rgba(11,23,18,0.92), rgba(11,23,18,0));
+    backdrop-filter:blur(2px);
+  }
+  .nav-mark{
+    font-family:'Fraunces', serif;
+    font-size:1.05rem;
+    font-weight:600;
+    color:var(--cream);
+  }
+  .nav-links{
+    display:flex;
+    gap:28px;
+    list-style:none;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+  }
+  .nav-links a{
+    text-decoration:none;
+    color:var(--cream-dim);
+    transition:color 0.2s ease;
+  }
+  .nav-links a:hover{ color:var(--sand); }
+  .nav-links{ display:none; }
+  @media(min-width:640px){ .nav-links{ display:flex; } }
+
+  /* ===== Hero ===== */
+  header.hero{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    position:relative;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.8rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--sand);
+    margin-bottom:22px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:28px; height:1px;
+    background:var(--sand);
+    display:inline-block;
+  }
+  h1.name{
+    font-size:clamp(2.8rem, 8vw, 5.4rem);
+    line-height:0.98;
+    color:var(--cream);
+    margin-bottom:20px;
+  }
+  h1.name em{
+    font-style:italic;
+    color:var(--sand);
+  }
+  .hero-role{
+    font-size:clamp(1.05rem, 2.4vw, 1.35rem);
+    color:var(--cream-dim);
+    max-width:34ch;
+    margin-bottom:36px;
+  }
+  .hero-contact{
+    display:flex;
+    flex-wrap:wrap;
+    gap:24px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.85rem;
+    color:var(--cream-dim);
+  }
+  .hero-contact a{
+    text-decoration:none;
+    border-bottom:1px solid transparent;
+    transition:border-color 0.2s ease, color 0.2s ease;
+    padding-bottom:2px;
+  }
+  .hero-contact a:hover{ color:var(--sand); border-color:var(--sand); }
+
+  .scroll-cue{
+    position:absolute;
+    bottom:44px; left:0;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--cream-dim);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .scroll-cue .stem{
+    width:1px; height:32px;
+    background:linear-gradient(var(--sand), transparent);
+  }
+
+  /* ===== Section shell ===== */
+  section{
+    position:relative;
+    padding:96px 0;
+    border-top:1px solid var(--line);
+  }
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    gap:16px;
+    margin-bottom:56px;
+  }
+  .section-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.8rem;
+    color:var(--sky);
+  }
+  .section-head h2{
+    font-size:clamp(1.6rem, 3.6vw, 2.2rem);
+    color:var(--cream);
+  }
+  .section-sub{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--cream-dim);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    margin-top:-40px;
+    margin-bottom:48px;
+    padding-left:40px;
+  }
+
+  /* ===== Experience — scorecard ledger ===== */
+  .card{
+    display:grid;
+    grid-template-columns:120px 1fr;
+    gap:8px 28px;
+    padding:28px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .card:last-child{ border-bottom:none; }
+  .card-dates{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--sand);
+    padding-top:4px;
+  }
+  .card-body h3{
+    font-size:1.15rem;
+    color:var(--cream);
+    margin-bottom:2px;
+    font-weight:500;
+  }
+  .card-org{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--sky);
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    margin-bottom:14px;
+  }
+  .card-body ul{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .card-body li{
+    position:relative;
+    padding-left:18px;
+    color:var(--cream-dim);
+    font-size:0.95rem;
+  }
+  .card-body li::before{
+    content:'—';
+    position:absolute;
+    left:0;
+    color:var(--sand);
+  }
+  @media(max-width:560px){
+    .card{ grid-template-columns:1fr; }
+    .card-dates{ padding-top:0; }
+  }
+
+  /* ===== Projects ===== */
+  .project{
+    background:var(--pine-light);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:36px;
+    position:relative;
+    overflow:hidden;
+  }
+  .project::after{
+    content:'';
+    position:absolute;
+    top:0; right:0;
+    width:140px; height:140px;
+    background:radial-gradient(circle at top right, rgba(201,168,105,0.14), transparent 70%);
+  }
+  .project-date{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.75rem;
+    color:var(--sand);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+  .project h3{
+    font-size:1.5rem;
+    margin:10px 0 14px;
+  }
+  .project p{
+    color:var(--cream-dim);
+    max-width:60ch;
+    margin-bottom:18px;
+  }
+  .tag-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    padding:6px 12px;
+    border:1px solid var(--line);
+    border-radius:100px;
+    color:var(--sky);
+  }
+
+  /* ===== Skills ===== */
+  .skills-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    gap:40px;
+  }
+  .skill-group h3{
+    font-size:0.82rem;
+    font-family:'IBM Plex Mono', monospace;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--sky);
+    margin-bottom:18px;
+    font-weight:500;
+  }
+  .skill-list{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .skill-list li{
+    color:var(--cream);
+    font-size:0.98rem;
+    padding-bottom:10px;
+    border-bottom:1px solid var(--line);
+  }
+  .interests-row{
+    margin-top:56px;
+    padding-top:32px;
+    border-top:1px solid var(--line);
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    align-items:center;
+  }
+  .interests-row .label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.75rem;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--cream-dim);
+    margin-right:8px;
+  }
+
+  /* ===== Awards / Leadership two-column ===== */
+  .two-col{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:64px;
+  }
+  @media(min-width:760px){ .two-col{ grid-template-columns:1fr 1fr; } }
+  .mini-head{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--sand);
+    margin-bottom:28px;
+  }
+  .mini-entry{
+    margin-bottom:26px;
+  }
+  .mini-entry h4{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:1.05rem;
+    color:var(--cream);
+  }
+  .mini-entry .org{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    color:var(--sky);
+    text-transform:uppercase;
+    margin:4px 0 8px;
+  }
+  .mini-entry p{
+    color:var(--cream-dim);
+    font-size:0.92rem;
+  }
+
+  /* ===== Education ===== */
+  .edu-block{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:24px;
+    padding:32px;
+    background:var(--pine-light);
+    border:1px solid var(--line);
+    border-radius:4px;
+  }
+  .edu-block h3{ font-size:1.3rem; margin-bottom:6px; }
+  .edu-block .org{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--sky);
+    text-transform:uppercase;
+  }
+  .edu-meta{
+    text-align:right;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.85rem;
+    color:var(--sand);
+  }
+  .edu-meta div{ margin-bottom:4px; }
+
+  /* ===== Footer ===== */
+  footer{
+    padding:80px 0 60px;
+    text-align:center;
+  }
+  footer h2{
+    font-size:clamp(1.8rem, 4vw, 2.6rem);
+    margin-bottom:20px;
+  }
+  footer p{
+    color:var(--cream-dim);
+    margin-bottom:32px;
+  }
+  .cta-row{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.82rem;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    padding:14px 28px;
+    border-radius:100px;
+    text-decoration:none;
+    transition:transform 0.2s ease, background 0.2s ease;
+    display:inline-block;
+  }
+  .btn-primary{
+    background:var(--sand);
+    color:var(--pine-deep);
+  }
+  .btn-secondary{
+    border:1px solid var(--line);
+    color:var(--cream);
+  }
+  .btn:hover{ transform:translateY(-2px); }
+  .foot-note{
+    margin-top:60px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    color:var(--cream-dim);
+    opacity:0.6;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation:none !important; transition:none !important; }
+  }
+
+  .reveal{
+    opacity:0;
+    transform:translateY(16px);
+    transition:opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.in{
+    opacity:1;
+    transform:translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<div id="contour-bg"><svg viewBox="0 0 1200 2400" preserveAspectRatio="none"></svg></div>
+
+<nav>
+  <span class="nav-mark">M. Zaback</span>
+  <ul class="nav-links">
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#education">Education</a></li>
+  </ul>
+</nav>
+
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Portland, OR</p>
+    <h1 class="name">Matthew<br><em>Zaback</em></h1>
+    <p class="hero-role">Software engineer with a data science foundation — now applying the same systems thinking to operations leadership on the course.</p>
+    <div class="hero-contact">
+      <a href="mailto:matthew.zaback@gmail.com">matthew.zaback@gmail.com</a>
+      <a href="tel:5412242385">541-224-2385</a>
+      <span>97229</span>
+    </div>
+    <div class="scroll-cue"><span class="stem"></span>Scroll</div>
+  </header>
+
+  <section id="experience">
+    <div class="section-head reveal">
+      <span class="section-num mono">01</span>
+      <h2>Experience</h2>
+    </div>
+
+    <div class="card reveal">
+      <div class="card-dates">6/2025 —<br>Current</div>
+      <div class="card-body">
+        <h3>Operations Supervisor</h3>
+        <div class="card-org">Pumpkin Ridge Golf Club · North Plains, OR</div>
+        <ul>
+          <li>Provide outstanding service for club members to create an unforgettable experience.</li>
+          <li>Direct staff on daily priorities and hold the operation to a consistent standard.</li>
+          <li>Train newcomers to get them up to speed on expectations and duties.</li>
+          <li>Interview candidates and provide structured feedback to other managers.</li>
+          <li>Maintain fleet and facility upkeep — carts, equipment, and clubhouse standards.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card reveal">
+      <div class="card-dates">9/2023 —<br>6/2025</div>
+      <div class="card-body">
+        <h3>Software Engineer I</h3>
+        <div class="card-org">Johanson Transportation Service · Tigard, OR</div>
+        <ul>
+          <li>Designed and released reusable C# applications to solve business problems for users.</li>
+          <li>Troubleshot and maintained .NET web apps to keep systems running efficiently.</li>
+          <li>Modified and optimized Microsoft SQL databases, tuning queries against large datasets.</li>
+          <li>Identified and closed SQL injection vulnerabilities and other security risks.</li>
+          <li>Built new reporting functionality in Crystal Reports based on client needs.</li>
+          <li>Worked weekends and overtime to keep releases shipping smoothly.</li>
+          <li>Resolved support tickets across the business within tight timelines.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card reveal">
+      <div class="card-dates">5/2023 —<br>9/2023</div>
+      <div class="card-body">
+        <h3>Software Engineer Intern</h3>
+        <div class="card-org">Johanson Transportation Service · Tigard, OR</div>
+        <ul>
+          <li>Resolved user-reported issues through the support ticket queue.</li>
+          <li>Ramped up on the codebase and fixed bugs encountered by end users.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card reveal">
+      <div class="card-dates">6/2022 —<br>9/2022</div>
+      <div class="card-body">
+        <h3>UHDS IT Student Assistant</h3>
+        <div class="card-org">Oregon State University · Corvallis, OR</div>
+        <ul>
+          <li>Coordinated network setups across university buildings.</li>
+          <li>Imaged new computers, tablets, and laptops for university staff.</li>
+          <li>Updated and maintained hardware for university staff.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="section-head reveal">
+      <span class="section-num mono">02</span>
+      <h2>Projects</h2>
+    </div>
+    <div class="project reveal">
+      <span class="project-date mono">December 2022</span>
+      <h3>Machine Learning — March Madness</h3>
+      <p>Built a predictive model for the NCAA tournament bracket using Logistic Regression, SVC, and KNN classifiers, and entered the results in Kaggle's annual March Madness competition.</p>
+      <div class="tag-row">
+        <span class="tag">Python</span>
+        <span class="tag">Logistic Regression</span>
+        <span class="tag">SVC</span>
+        <span class="tag">KNN</span>
+        <span class="tag">Kaggle</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="section-head reveal">
+      <span class="section-num mono">03</span>
+      <h2>Skills</h2>
+    </div>
+    <div class="skills-grid reveal">
+      <div class="skill-group">
+        <h3>Languages & Frameworks</h3>
+        <ul class="skill-list">
+          <li>C#</li>
+          <li>.NET Framework</li>
+          <li>WinForms</li>
+          <li>HTML</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <h3>Data & Reporting</h3>
+        <ul class="skill-list">
+          <li>MS SQL</li>
+          <li>SAP Crystal Reports</li>
+          <li>Microsoft Excel</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <h3>Tools & Platforms</h3>
+        <ul class="skill-list">
+          <li>Git</li>
+          <li>Azure DevOps</li>
+          <li>Visual Studio</li>
+          <li>DevExpress</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <h3>Other</h3>
+        <ul class="skill-list">
+          <li>IT Support</li>
+          <li>Microsoft Word</li>
+        </ul>
+      </div>
+    </div>
+    <div class="interests-row reveal">
+      <span class="label">Off the clock</span>
+      <span class="tag">Golf</span>
+      <span class="tag">Pickleball</span>
+      <span class="tag">Basketball</span>
+      <span class="tag">TV shows</span>
+    </div>
+  </section>
+
+  <section id="leadership">
+    <div class="section-head reveal">
+      <span class="section-num mono">04</span>
+      <h2>Leadership & Awards</h2>
+    </div>
+    <div class="two-col reveal">
+      <div>
+        <p class="mini-head">Leadership & Activities</p>
+        <div class="mini-entry">
+          <h4>Men's Golf Team Captain</h4>
+          <p class="org">Pacific University · 9/2021 – 5/2023</p>
+          <p>Led and guided freshmen and newcomers to a rewarding season.</p>
+        </div>
+        <div class="mini-entry">
+          <h4>Team Data Science Member</h4>
+          <p class="org">Pacific University · 9/2020 – 5/2023</p>
+          <p>Participated in data-science-themed colloquiums led by professors from across Oregon.</p>
+        </div>
+      </div>
+      <div>
+        <p class="mini-head">Awards & Certifications</p>
+        <div class="mini-entry">
+          <h4>DataFest — Best Data Visualization</h4>
+          <p class="org">Willamette University · 4/2022</p>
+          <p>Awarded honors for best data visualization, collaborating with fellow classmates.</p>
+        </div>
+        <div class="mini-entry">
+          <h4>CompTIA A+ Certification</h4>
+          <p class="org">V15 (220-1201 & 220-1202) · 12/2025</p>
+          <p>Covers hardware, software, networking, and operational procedures — a solid technical base for further training.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="section-head reveal">
+      <span class="section-num mono">05</span>
+      <h2>Education</h2>
+    </div>
+    <div class="edu-block reveal">
+      <div>
+        <h3>B.S. Data Science, Minor in Business</h3>
+        <p class="org">Pacific University · Forest Grove, OR</p>
+        <p style="margin-top:10px; color:var(--cream-dim); font-size:0.92rem;">Pacific University Honors Scholarship — awarded for SAT score.</p>
+      </div>
+      <div class="edu-meta">
+        <div>GPA 3.7 / 4.0</div>
+        <div>Graduated 5/2023</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <h2 class="reveal">Let's talk shop.</h2>
+    <p class="reveal">Open to software engineering and data roles in Portland and beyond.</p>
+    <div class="cta-row reveal">
+      <a class="btn btn-primary" href="mailto:matthew.zaback@gmail.com">Email Me</a>
+      <a class="btn btn-secondary" href="tel:5412242385">Call 541-224-2385</a>
+    </div>
+    <p class="foot-note">Matthew Zaback · Portland, OR 97229</p>
+  </footer>
+
+</div>
+
+<script>
+  // Generate topographic contour lines
+  (function(){
+    const svg = document.querySelector('#contour-bg svg');
+    const W = 1200, H = 2400;
+    const ns = 'http://www.w3.org/2000/svg';
+    const rows = 26;
+    for(let i=0;i<rows;i++){
+      const baseY = (i/rows)*H;
+      let d = `M 0 ${baseY}`;
+      const amp = 18 + (i%5)*6;
+      const freq = 0.006 + (i%3)*0.001;
+      for(let x=0;x<=W;x+=40){
+        const y = baseY + Math.sin((x*freq) + i*0.7) * amp + Math.sin((x*freq*2.3)+i) * (amp*0.4);
+        d += ` L ${x} ${y.toFixed(1)}`;
+      }
+      const path = document.createElementNS(ns,'path');
+      path.setAttribute('d', d);
+      path.setAttribute('class','contour-path');
+      svg.appendChild(path);
+    }
+  })();
+
+  // Reveal on scroll
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); }
+    });
+  }, { threshold:0.12 });
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+
+</body>
+</html>
